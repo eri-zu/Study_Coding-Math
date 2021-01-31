@@ -82,35 +82,37 @@ class Vector2d {
 }
 
 class Particle {
-  constructor(x, y, speed, direction) {
+  constructor(x, y, speed, direction, gravity) {
     this.position = new Vector2d(x, y);
     this.velocity = new Vector2d(0, 0);
-    this.accel = new Vector2d(0, 0.1)
+    this.gravity = new Vector2d(0, gravity || 0); //もしgravityの値を書かなかったら0（=gravityなし）
 
     this.velocity.setLength(speed); 
     this.velocity.setAngle(direction);
+
   }
 
   display() {
     context.beginPath();
     context.arc(this.position.getX(), this.position.getY(), 10, 0, Math.PI * 2, false );
-    context.fillStyle = "#000"
+    context.fillStyle = "#000";
     context.fill();
-    context.stroke();
   }
 
   move() {
     this.position.addTo(this.velocity);
-    this.velocity.addTo(this.accel); // 全部のパーティクル落ちていく
+    this.velocity.addTo(this.gravity); // 全部のパーティクル落ちていく
   }
 
 }
 
 let particles = [];
 let num = 100;
+let setedcolor;
 
 for(let i = 0; i < num; i ++) {
-  particles.push(new Particle(width / 2, height / 3.5, Math.random() * 4 + 1, Math.random() * Math.PI * 2));
+
+  particles.push(new Particle(width / 2, height / 3.5, Math.random() * 4 + 1, Math.random() * Math.PI * 2, 0.1));
   // 1 < speed < 4
   // 0 < direction < 360
 }

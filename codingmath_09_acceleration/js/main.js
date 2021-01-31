@@ -82,15 +82,12 @@ class Vector2d {
 }
 
 class Particle {
-  constructor() {
-    // 位置(position)と速度（velocity）のベクター    
-    this.position = new Vector2d(100, 100);
+  constructor(x, y, speed, direction) {
+    this.position = new Vector2d(x, y);
     this.velocity = new Vector2d(0, 0);
-
-    // vector length (= magnitude) & angle
-    // velocityは長さが3で、30degの方向にあるベクトルになる
-    this.velocity.setLength(3); 
-    this.velocity.setAngle(Math.PI / 6);
+    this.accel = new Vector2d(0.1, 0.1);  // (0.1, 0.1)のベクターなので、右斜め下向きのような力(45度)がボールに働く→結果的にボールは打ちあがらず、失速して落ちていく
+    this.velocity.setLength(speed);
+    this.velocity.setAngle(direction); 
   }
 
   display() {
@@ -104,11 +101,12 @@ class Particle {
   move() {
     // poistionにvelocity加える
     this.position.addTo(this.velocity);
+    this.velocity.addTo(this.accel);
   }
 
 }
 
-const particle = new Particle();
+const particle = new Particle(100, height, 10, -Math.PI / 2); // -90度の方向なので、accelがなかったら普通に上に打ちあがる
 render();
 
 function render() {

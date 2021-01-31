@@ -82,39 +82,48 @@ class Vector2d {
 }
 
 class Particle {
-  constructor(x, y, speed, direction) {
-    // 位置(position)と速度（velocity）のベクター    
-    // x, yはparticlが最初に置かれている場所
+  constructor(x, y, speed, direction, color) {
     this.position = new Vector2d(x, y);
     this.velocity = new Vector2d(0, 0);
+    this.accel = new Vector2d(0, 0.1);
 
-    // vector length (= magnitude) & angle
-    // velocityは長さが3で、30degの方向にあるベクトルになる
-    this.velocity.setLength(speed); // length = 大きさのこと
-    this.velocity.setAngle(direction); // direction = angleのこと
+    this.velocity.setLength(speed); 
+    this.velocity.setAngle(direction);
+
+    this.color = color;
   }
 
   display() {
     context.beginPath();
     context.arc(this.position.getX(), this.position.getY(), 10, 0, Math.PI * 2, false );
-    context.fillStyle = "#000"
+    context.fillStyle = this.color;
     context.fill();
-    context.stroke();
   }
 
   move() {
-    // poistionにvelocity加える
     this.position.addTo(this.velocity);
+    this.velocity.addTo(this.accel); // 全部のパーティクル落ちていく
   }
 
 }
 
 let particles = [];
 let num = 100;
+let setedcolor;
 
 for(let i = 0; i < num; i ++) {
-  particles[i] =  new Particle(width / 2, height / 2, Math.random() * 4 + 1, Math.random() * Math.PI * 2);
-  // particles.push(new Particle(width / 2, height / 2, Math.random() * 4 + 1, Math.random() * Math.PI * 2));
+
+  if(i % 3 == 0) {
+    setedcolor = "#6FC2FF";
+  } else if(i % 3 == 1) {
+    setedcolor = "#F84297";
+  } else if(i % 3 == 2) {
+    setedcolor = "#fff";
+  }
+
+  particles.push(new Particle(width / 2, height / 3.5, Math.random() * 4 + 1, Math.random() * Math.PI * 2, setedcolor));
+  // 1 < speed < 4
+  // 0 < direction < 360
 }
 
 render();
