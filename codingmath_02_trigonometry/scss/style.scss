@@ -1,0 +1,34 @@
+// scss
+@import "base/_base";
+@import "base/_reset";
+@import "mixin/_mixin";
+@import "setting/_variables";
+
+.btn {
+	background-color: orange;
+	color: #fff;
+	padding: 2rem;
+	display: inline-block;
+	text-decoration: none;
+	@media screen and (min-width: 768px) {
+		&:hover {
+			opacity: 0.6;
+		}
+	}
+	// &:hover {
+	// 	opacity: 0.6;
+	// }
+	&:active {
+		opacity: 0.6;
+	}
+	// @media screen and (max-width: 769px) {
+	// 	&.js-touch {
+	// 		opacity: 0.6;
+	// 	}
+	// }
+}
+
+// js & hover & active ×
+// js & hover ×
+// js(sp) & hover(pc) ○
+

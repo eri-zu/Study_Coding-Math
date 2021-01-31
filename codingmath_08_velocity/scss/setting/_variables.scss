@@ -1,0 +1,30 @@
+@charset "UTF-8";
+// <サイト基本設定> ※reset.cssに記載していないもの
+
+// 幅関係
+$layout-width-inner: 1080px; // インナー幅
+
+// ブレークポイント
+  //↑ <メモ> ブラウザ幅は以下を想定
+  // sp:768px~320pxまで
+  // tab:(インナー幅-1px)~768pxまで
+  // pc:インナーの幅まで
+  $breakpoints: (
+    "sp": "screen and (max-width: 767px)",
+    "tab": "screen and (max-width: #{$layout-width-inner - 1px})",
+    "pc": "screen and (min-width: #{$layout-width-inner})",
+  );
+
+
+// 色関係の設定
+  // サイトカラー
+  // フォントカラー
+  // リンクカラー
+  // 背景カラー
+  // ボーダー
+
+
+//フォントサイズ
+
+// フォント関係の設定
+
