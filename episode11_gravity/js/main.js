@@ -89,32 +89,55 @@ class Particle {
     this.velocity.setAngle(direction);
   }
 
-  // 2点間の距離
-  distanceTo(p) {
-    const dx = p.getX() - this.getX();  
-    const dy = p.getY() - this.getY();  
-    const d = Math.sqrt()
-  }
-
-  // 角度
-  angleTo() {
-
-  }
-
-
   move() {
     this.position.addTo(this.velocity);
   }
+
+  //------------------------------------------------------
+  // 以下は加速度（重力）の計算
+  // 加速度を地球と太陽の位置関係及び太陽の大きさから求める
+  //-------------------------------------------------------
+
+  //  地球と太陽の2点間が作り出す角度（これが重力ベクトルの持つ大きさとなる）
+  distanceTo(p2) {
+    let dx = p2.position.getX() - this.position.getX();
+    let dy = p2.position.getY() - this.position.getY();
+
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  // 地球と太陽の2点間が作り出す角度（これが重力ベクトルの持つ角度=方向となる）
+  angleTo(p2) {
+    let dx = p2.position.getX() - this.position.getX();
+    let dy = p2.position.getY() - this.position.getY();
+
+    return Math.atan2(dy, dx);
+  }
+
+  // 重力を求める
+  gravitateTo(p2) {
+    var gravity = new Vector2d(0, 0);
+    var dist = this.distanceTo(p2);
+
+    gravity.setLength(p2.mass / (dist * dist)); // ★重力の公式 g = m / d2 万有引力は２つの物体が近いほど強く作用するので、距離が公式に使われる
+    gravity.setAngle(this.angleTo(p2));
+
+    // 加速を速さに足す
+    this.velocity.addTo(gravity);
+  }
 }
 
-const sun = new Particle(width / 2, height / 2, 0, 0);
-const earth = new Particle(width / 2, height / 2, 0, 0);
-const mass = 2000; // sunの大きさ
+const earth = new Particle(width / 2 + 200, height / 2, 10, -Math.PI / 2); // 初期値は太陽の真横にある 速度は真上向きの力
+const sun = new Particle(width / 2, height / 2, 0, 0); //太陽は動かないので、速度0 向き0
+sun.mass = 20000; // sunの大きさ
 
 render();
 
 function render() {
   context.clearRect(0, 0, width, height);
+
+  earth.move();
+  earth.gravitateTo(sun);
 
   // sun
   context.beginPath();
@@ -134,7 +157,7 @@ function render() {
   context.arc(
     earth.position.getX(),
     earth.position.getY(),
-    10,
+    5,
     0,
     Math.PI * 2,
     false

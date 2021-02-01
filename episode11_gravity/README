@@ -5,9 +5,19 @@ gravity = m / r2
 m : 引っ張る力を持つ物体の質量（地球とか太陽）
 r : ２つの物体の中心を結んだ長さ
 
-gravisty = acceleration のこと
+gravisty = acceleration のこと＝つまり、ベクトル＝大きさと方向を持つ
 
 planetのvelosityにgravityを加える
+＝結果的にplanetは直線せず、gravityのせいで太陽の周りをグルグル回る
 
 gravityVectorLength = m / r2
 
+
+
+velocity → new gravity → new velocity → new gravisty.....
+↓
+gravity（accel）を求めたい
+↓
+gravity = m / r2
+↓
+2点のいちがワカああ
