@@ -1,0 +1,13 @@
+重力は物体の大きさにより異なる
+
+gravity = m / r2
+
+m : 引っ張る力を持つ物体の質量（地球とか太陽）
+r : ２つの物体の中心を結んだ長さ
+
+gravisty = acceleration のこと
+
+planetのvelosityにgravityを加える
+
+gravityVectorLength = m / r2
+
