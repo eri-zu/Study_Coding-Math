@@ -56,11 +56,9 @@ class Vector2d {
     this.y += vector2.getY();
   }
 
-  // ベクトルの角度をセットする
-  setAngle(angle) {
-    const length = this.getLength();
-    this.x = Math.cos(angle) * length;
-    this.y = Math.sin(angle) * length;
+  // ベクトルの大きさを取得
+  getLength() {
+    return Math.sqrt(this.x * this.x, this.y * this.y);
   }
 
   // ベクトルの角度を取得
@@ -72,19 +70,15 @@ class Vector2d {
   setLength(length) {
     const angle = this.getAngle();
     this.x = Math.cos(angle) * length;
+    this.y = Math.cos(angle) * length;
+  }
+
+  // ベクトルの角度をセットする
+  setAngle(angle) {
+    const length = this.getLength();
+    this.x = Math.cos(angle) * length;
     this.y = Math.sin(angle) * length;
   }
-
-  // ベクトルの大きさを取得
-  getLength() {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
-  }
-
-  // ベクトルに係数を乗算するだけ
-  multiplyBy(val) {
-		this.x *= val;
-		this.y *= val;
-	}
 }
 
 class Particle {
@@ -97,8 +91,7 @@ class Particle {
     this.velocity.setAngle(direction);
 
     // var
-    this.radius = 15;
-    this.friction = 0.97;
+    this.radius = 30;
   }
 
   display() {
@@ -113,30 +106,38 @@ class Particle {
     );
     context.fillStyle = "#000";
     context.fill();
+    context.stroke();
   }
 
   move() {
     this.position.addTo(this.velocity);
   }
 
-  // velocityが摩擦で失速する
-  rub() {
-    this.velocity.multiplyBy(this.friction);
+  reapper() {
+    if(this.position.getX() - this.radius > width) {
+      this.position.setX(-this.radius);
+    }
+    if(this.position.getX() + this.radius < 0) {
+      this.position.setX(this.radius);
+    }
+    if(this.position.getY() - this.radius >  height) {
+      this.position.setY(-this.radius);
+    }
+    if(this.position.getY() + this.radius < 0) {
+      this.position.setY(this.radius);
+    }
   }
-
 }
 
-let particle;
-particle = new Particle(width / 2, height / 2, 8, Math.random() * Math.PI * 2);
-
+const ball = new Particle(0, 0, 5, Math.PI / 6);
 render();
 
 function render() {
   context.clearRect(0, 0, width, height);
 
-  particle.display();
-  particle.move();
-  particle.rub();
+  ball.display();
+  ball.move();
+  ball.reapper();
 
   window.requestAnimationFrame(render);
 }

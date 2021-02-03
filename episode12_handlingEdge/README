@@ -1,11 +1,5 @@
-main.js
-reappear
+Simple "friction" for coding (not true friction..)
+・Just use multiplication
+・Friction doesn't have direction = no set / get angle
+・No need to chech if velocity is less than friction or if velocity is zero
 
-main2.js
-fireworks
-
-main3.js
-fountain
-
-main4.js
-bounce
