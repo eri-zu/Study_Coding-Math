@@ -27,6 +27,7 @@ class Vector2d {
     return this.y;
   }
 
+  // ベクトルのx, yにそれぞれ値を加える
   add(x, y) {
     this.x += x;
     this.y += y;
@@ -47,9 +48,20 @@ class Vector2d {
     this.y /= y;
   }
 
+  // ベクトル同士の加算
   addTo(vector2) {
     this.x += vector2.getX();
     this.y += vector2.getY();
+  }
+
+  // ベクトル同士の減算して新しいベクトルを得る ※新しいベクトル作らなかったらunfinedになるので
+  subtract(vector2) {
+    return new Vector2d(this.x - vector2.getX(), this.y - vector2.getY());
+  }
+
+  // ベクトルに係数をかけて新しいベクトルを得る
+  multiply(k) {
+    return new Vector2d(this.x * k, this.y * k);
   }
 
   setAngle(angle) {
@@ -83,8 +95,11 @@ class Particle {
     this.velocity.setAngle(direction);
 
     // var
-    this.radius = 40;
-    this.bounce = -0.9  
+    this.springPoint = new Vector2d(width / 2, height / 2); // 重りの持つベクターがバネ運動をする先の位置（目標位置）
+    this.distance; // バネの運動先と重りの位置の距離
+    this.springForce; // バネの力（=加速度）
+    this.radius = 20;
+    this.k = 0.1;
   }
 
   display() {
@@ -105,25 +120,41 @@ class Particle {
     this.position.addTo(this.velocity);
   }
 
-  gravitate() {
-    this.velocity.addTo(this.gravity);
+  //バネ運動
+  spring() {
+    // 移動目標先と重りの距離（ベクトルの減算）
+    this.distance = this.springPoint.subtract(this.position); 
+    // その距離にバネ係数をかけて、バネの力（加速度）を求める = これは公式
+    this.springForce = this.distance.multiply(this.k);
+    // 速度にその力を加える（加速度なので）
+    this.velocity.addTo(this.springForce);
   }
 }
 
-let particle;
-
-// 重力0.1を入れることでボールが落ちるときに失速する
-particle = new Particle(10, 10, 8, Math.random() * Math.PI * 2, 0.1);
+// 動く重り
+const weight = new Particle(Math.random() * width, Math.random() * height, 0, 0);
 
 render();
 
 function render() {
   context.clearRect(0, 0, width, height);
 
-  particle.display();
-  particle.move();
-  particle.gravitate();
+  weight.display();
+  weight.move();
+  weight.spring();
 
+  // 中心
+  context.beginPath();
+  context.arc(width / 2, height / 2, 3, 0, Math.PI * 2, false);
+  context.fillStyle = "#000";
+  context.fill();
+
+  // 中心から伸びる線
+  context.beginPath();
+  context.moveTo(width / 2, height / 2);
+  context.lineTo(weight.position.getX(), weight.position.getY());
+  context.stroke();
+  
 
   window.requestAnimationFrame(render);
 }
