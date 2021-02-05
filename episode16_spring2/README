@@ -1,0 +1,33 @@
+Spring
+
+easing velocity ∝ distance
+spring accel ∝ distance
+
+F = kx
+
+F: force (= accel Vec)
+k: stiffness of string (usually less than 0.2)
+x: distance the spring stretched
+
+バネ力0.1とする
+
+距離x 100
+加速度f 100 * 0.1 = 10
+速度v 0 + 10 = 10
+↓
+距離 100 - 10 = 90
+加速度 90 * 0.1 = 9
+速度 10 + 9 = 19
+↓
+距離 90 - 19 = 71
+加速度 71 * 0.1 = 7.1
+速度 19 + 7.1 = 26.1
+...
+
+加速度は落ちていくが、速度は増えていく
+
+main.js
+spring × friction × distance
+
+main2.js
+spring × distance * friction × gravity
