@@ -1,0 +1,29 @@
+Optimization - 公式を整理
+
+// 速度
+// 直座標（x軸とy軸で座標を表す）を極座標（距離と角度で座標を表す）
+// angle: x軸と(0, 0)と(x, y)を結ぶ線が作る角度
+// speed: 斜辺の大きさ（hypotenuse）, ベクトルの大きさ
+vx = speed * Math.cos(angle);
+vy = speed * Math.sin(angle);
+
+// 角加速度
+// 引力の場合は、forceを質量と物体の2点間の距離から求めることができる
+ax = force * Math.cos(angle);
+ay = force * Math.sin(angle);
+
+* 引力の場合
+force = m / r2 
+m: 物体の質量
+r: 2つの物体の中心を結んだ長さ
+
+
+main.js
+template
+
+main2.js
+spring
+
+main3.js
+orbit
+
