@@ -96,8 +96,10 @@ class Particle {
     this.mass;
     this.radius = 20;
     this.bounce;
-    this.friction = 0.9;
+    this.friction = 0.95;
     this.gravity = grav || 0;
+
+    console.log(direction);
   }
 
   display() {
@@ -105,26 +107,6 @@ class Particle {
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     context.fillSyle = "#000";
     context.fill();
-  }
-
-  getSpeed() {
-    return Math.sqrt(this.vx * this.vx + this.vy * this.vy); // 直角三角形の斜辺
-  }
-
-  setSpeed(speed) {
-    const heading = this.getHeading(); // angleのこと=直角三角形の角度
-    this.vx = Math.cos(heading) * speed; // speedは直角三角形の斜辺の長さ
-    this.vy = Math.sin(heading) * speed; // speedは直角三角形の斜辺の長さ
-  }
-
-  getHeading() {
-    return Math.atan2(this.vy, this.vx);
-  }
-
-  setHeading(heading) {
-    const speed = this.getSpeed(); // angleのこと=直角三角形の角度
-    this.vx = Math.cos(heading) * speed; // speedは直角三角形の斜辺の長さ
-    this.vy = Math.sin(heading) * speed; // speedは直角三角形の斜辺の長さ
   }
 
   accelerate(ax, ay) {
@@ -167,23 +149,11 @@ class Particle {
     this.vx += ax;
     this.vy += ay;
   }
-
-  springTo(point, k, length) {
-    // point: バネの目標地点
-    // k: バネ係数
-    // length: offset（目標地点までのオフセット距離）
-    const dx = point.x - this.x;
-    const dy = point.y - this.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const springForce = (dist - length || 0) * k;
-    const ax = (dx / dist) * springForce;
-    const ay = (dy / dist) * springForce;
-
-    this.vx += ax;
-    this.vy += ay;
-  }
 }
 
+// var
+const k = 0.1; // バネ係数
+const springLength = 100;
 const weight = new Particle(
   Math.random() * width,
   Math.random() * height,
@@ -193,9 +163,10 @@ const weight = new Particle(
 );
 let springPoint = {
   x: width / 2,
-  y: height / 2
+  y: height / 2,
 };
 
+// mouse
 window.addEventListener("mousemove", (e) => {
   springPoint.x = e.clientX;
   springPoint.y = e.clientY;
@@ -206,6 +177,14 @@ render();
 function render() {
   context.clearRect(0, 0, width, height);
 
+  // バネの力（加速度）を速度に加える
+  const dx = springPoint.x - weight.x;
+  const dy = springPoint.y - weight.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  const springForce = (dist - springLength) * k;
+  const ax = (dx / dist) * springForce;
+  const ay = (dy / dist) * springForce;
+
   // マウスと重りを結ぶ線
   context.beginPath();
   context.moveTo(springPoint.x, springPoint.y);
@@ -213,8 +192,8 @@ function render() {
   context.stroke();
 
   weight.display();
+  weight.accelerate(ax, ay);
   weight.update();
-  weight.springTo(springPoint, 0.1, 100);
 
   window.requestAnimationFrame(render);
 }

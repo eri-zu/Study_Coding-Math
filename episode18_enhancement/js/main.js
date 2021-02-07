@@ -94,9 +94,9 @@ class Particle {
     this.vx = Math.cos(direction) * speed;
     this.vy = Math.sin(direction) * speed;
     this.mass;
-    this.radius = 20;
+    this.radius;
     this.bounce;
-    this.friction = 0.9;
+    this.friction;
     this.gravity = grav || 0;
   }
 
@@ -105,26 +105,6 @@ class Particle {
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     context.fillSyle = "#000";
     context.fill();
-  }
-
-  getSpeed() {
-    return Math.sqrt(this.vx * this.vx + this.vy * this.vy); // 直角三角形の斜辺
-  }
-
-  setSpeed(speed) {
-    const heading = this.getHeading(); // angleのこと=直角三角形の角度
-    this.vx = Math.cos(heading) * speed; // speedは直角三角形の斜辺の長さ
-    this.vy = Math.sin(heading) * speed; // speedは直角三角形の斜辺の長さ
-  }
-
-  getHeading() {
-    return Math.atan2(this.vy, this.vx);
-  }
-
-  setHeading(heading) {
-    const speed = this.getSpeed(); // angleのこと=直角三角形の角度
-    this.vx = Math.cos(heading) * speed; // speedは直角三角形の斜辺の長さ
-    this.vy = Math.sin(heading) * speed; // speedは直角三角形の斜辺の長さ
   }
 
   accelerate(ax, ay) {
@@ -167,54 +147,14 @@ class Particle {
     this.vx += ax;
     this.vy += ay;
   }
-
-  springTo(point, k, length) {
-    // point: バネの目標地点
-    // k: バネ係数
-    // length: offset（目標地点までのオフセット距離）
-    const dx = point.x - this.x;
-    const dy = point.y - this.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const springForce = (dist - length || 0) * k;
-    const ax = (dx / dist) * springForce;
-    const ay = (dy / dist) * springForce;
-
-    this.vx += ax;
-    this.vy += ay;
-  }
 }
-
-const weight = new Particle(
-  Math.random() * width,
-  Math.random() * height,
-  50, // speed
-  Math.random() * Math.PI * 2, //direction
-  0.5
-);
-let springPoint = {
-  x: width / 2,
-  y: height / 2
-};
-
-window.addEventListener("mousemove", (e) => {
-  springPoint.x = e.clientX;
-  springPoint.y = e.clientY;
-});
 
 render();
 
 function render() {
   context.clearRect(0, 0, width, height);
 
-  // マウスと重りを結ぶ線
-  context.beginPath();
-  context.moveTo(springPoint.x, springPoint.y);
-  context.lineTo(weight.x, weight.y);
-  context.stroke();
-
   weight.display();
-  weight.update();
-  weight.springTo(springPoint, 0.1, 100);
 
   window.requestAnimationFrame(render);
 }
