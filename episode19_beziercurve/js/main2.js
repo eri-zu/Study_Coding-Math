@@ -5,6 +5,42 @@ const context = canvas.getContext("2d");
 const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
 
+class Utils {
+  constructor() {}
+
+  randomRange(min, max) {
+    // randomRange(5, 10)とすると、5~10の範囲が得られる
+    return min + Math.random() * (max - min);
+  }
+
+  quadraticBezier(p0, p1, p2, t, pFinal) {
+    // 2次曲線
+    // Math.pow(7, 3)
+    pFinal = pFinal || {};
+    pFinal.x =
+      Math.pow(1 - t, 2) * p0.x + (1 - t) * 2 * t * p1.x + t * t * p2.x;
+    pFinal.y =
+      Math.pow(1 - t, 2) * p0.y + (1 - t) * 2 * t * p1.y + t * t * p2.y;
+    return pFinal;
+  }
+
+  cubicBezier(p0, p1, p2, p3, t, pFinal) {
+    // 3次曲線
+    pFinal = pFinal || {};
+    pFinal.x =
+      Math.pow(1 - t, 3) * p0.x +
+      Math.pow(1 - t, 2) * 3 * t * p1.x +
+      (1 - t) * 3 * t * t * p2.x +
+      t * t * t * p3.x;
+    pFinal.y =
+      Math.pow(1 - t, 3) * p0.y +
+      Math.pow(1 - t, 2) * 3 * t * p1.y +
+      (1 - t) * 3 * t * t * p2.y +
+      t * t * t * p3.y;
+    return pFinal;
+  }
+}
+
 class Vector2d {
   constructor(x, y) {
     this.x = x;
@@ -94,12 +130,10 @@ class Particle {
     this.vx = Math.cos(direction) * speed;
     this.vy = Math.sin(direction) * speed;
     this.mass;
-    this.radius = 20;
+    this.radius = 4;
     this.bounce;
-    this.friction = 0.95;
+    this.friction = 1;
     this.gravity = grav || 0;
-
-    console.log(direction);
   }
 
   display() {
@@ -107,6 +141,26 @@ class Particle {
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     context.fillSyle = "#000";
     context.fill();
+  }
+
+  getSpeed() {
+    return Math.sqrt(this.vx * this.vx + this.vy * this.vy); // 直角三角形の斜辺
+  }
+
+  setSpeed(speed) {
+    const heading = this.getHeading(); // angleのこと=直角三角形の角度
+    this.vx = Math.cos(heading) * speed; // speedは直角三角形の斜辺の長さ
+    this.vy = Math.sin(heading) * speed; // speedは直角三角形の斜辺の長さ
+  }
+
+  getHeading() {
+    return Math.atan2(this.vy, this.vx);
+  }
+
+  setHeading(heading) {
+    const speed = this.getSpeed(); // angleのこと=直角三角形の角度
+    this.vx = Math.cos(heading) * speed; // speedは直角三角形の斜辺の長さ
+    this.vy = Math.sin(heading) * speed; // speedは直角三角形の斜辺の長さ
   }
 
   accelerate(ax, ay) {
@@ -139,7 +193,7 @@ class Particle {
   // 引力
   gravitateTo(p2) {
     const dx = p2.x - this.x;
-    const dy = p2.x - this.x;
+    const dy = p2.y - this.y;
     const distSQ = dx * dx + dy * dy;
     const dist = Math.sqrt(distSQ);
     const force = p2.mass / distSQ; // 引力 = m / r2
@@ -149,51 +203,85 @@ class Particle {
     this.vx += ax;
     this.vy += ay;
   }
+
+  springTo(point, k, length) {
+    // point: バネの目標地点
+    // k: バネ係数
+    // length: offset（目標地点までのオフセット距離）
+    const dx = point.x - this.x;
+    const dy = point.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const springForce = (dist - length || 0) * k;
+    const ax = (dx / dist) * springForce;
+    const ay = (dy / dist) * springForce;
+
+    this.vx += ax;
+    this.vy += ay;
+  }
+
+  addSpring(point, k, length) {
+    this.springs.push({
+      point: point,
+      k: k,
+      length: length,
+    });
+  }
 }
 
-// var
-const k = 0.1; // バネ係数
-const springLength = 100;
-const weight = new Particle(
-  Math.random() * width,
-  Math.random() * height,
-  50, // speed
-  Math.random() * Math.PI * 2, //direction
-  0.5
-);
-let springPoint = {
-  x: width / 2,
-  y: height / 2,
-};
+// new
+const utils = new Utils();
 
-// mouse
-window.addEventListener("mousemove", (e) => {
-  springPoint.x = e.clientX;
-  springPoint.y = e.clientY;
-});
+// var
+const p0 = {
+  x: utils.randomRange(0, width),
+  y: utils.randomRange(0, height),
+};
+const p1 = {
+  x: utils.randomRange(0, width),
+  y: utils.randomRange(0, height),
+};
+const p2 = {
+  x: utils.randomRange(0, width),
+  y: utils.randomRange(0, height),
+};
+const p3 = {
+  x: utils.randomRange(0, width),
+  y: utils.randomRange(0, height),
+};
+let maxT = 0;
+const pFinal = {};
+
+// new
+const circle0 = new Particle(p0.x, p0.y, 0, 0);
+const circle1 = new Particle(p1.x, p1.y, 0, 0);
+const circle2 = new Particle(p2.x, p2.y, 0, 0);
+const circle3 = new Particle(p3.x, p3.y, 0, 0);
 
 render();
 
 function render() {
   context.clearRect(0, 0, width, height);
 
-  // バネの力（加速度）を速度に加える
-  const dx = springPoint.x - weight.x;
-  const dy = springPoint.y - weight.y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  const springForce = (dist - springLength) * k;
-  const ax = (dx / dist) * springForce;
-  const ay = (dy / dist) * springForce;
+  // コントロールポイントの描画
+  circle0.display();
+  circle1.display();
+  circle2.display();
+  circle3.display();
 
-  // マウスと重りを結ぶ線
+  // 自前の関数でベジェ曲線を動的に描画
+  const pFinal = {};
   context.beginPath();
-  context.moveTo(springPoint.x, springPoint.y);
-  context.lineTo(weight.x, weight.y);
+  context.moveTo(p0.x, p0.y);
+  for (let t = 0; t <= maxT; t += 0.01) {
+    utils.cubicBezier(p0, p1, p2, p3, t, pFinal);
+    context.lineTo(pFinal.x, pFinal.y);
+  }
   context.stroke();
 
-  weight.display();
-  weight.accelerate(ax, ay);
-  weight.update();
+  maxT += 0.01;
+  if (maxT > 1) {
+    maxT = 0;
+  }
 
   window.requestAnimationFrame(render);
 }
