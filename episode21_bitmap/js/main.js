@@ -234,15 +234,8 @@ class Particle {
 // new
 const utils = new Utils();
 
-// const 
-const object = new Particle(width / 2, height / 2, 0, 0);
-object.radius = 200;
-
 // hitされるオブジェクトを描画
 const p = new Particle(0, height / 2, 10, 0);
-p.radius = 200;
-p.display();
-
 targetContext.beginPath();
 targetContext.arc(width / 2, height / 2, 200, 0, Math.PI * 2, false);
 targetContext.fill();
@@ -260,7 +253,7 @@ function render() {
 
   // シングルピクセルデータを取得
   const imageData = targetContext.getImageData(p.x, p.y, 1, 1); // getImageData(left, top, width, height)はcanvas領域のピクセルデータを表す
-  //imageData.data[3] = alpha
+  // imageData.data[3] = alpha
   // imageData.data[2] = blue
   // imageData.data[1] = green
   // imageData.data[0] = red

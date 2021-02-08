@@ -1,22 +1,9 @@
-Bezier Curves
+Collision detection Bitmap
 
-t = 0.0 - 1.0
+reference
+https://developer.mozilla.org/ja/docs/Web/Guide/HTML/Canvas_tutorial/Pixel_manipulation_with_canvas
+https://developer.mozilla.org/ja/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
 
-p0, p1  - pA（p0, p1を結んだとき、tの値に応じて座標を変える点）
-p1, p2  - pB（p1, p2を結んだとき、tの値に応じて座標を変える点）
+context.globalCompositeOperation = "destination-out";
 
-★pAとpBを結んだ直線が描く軌跡がベジェ曲線になる
-★カーブはp0とp2はとおるが、p1は通らない => p1をコントロールポイントと呼ぶ 
-★tの値によりベジェ曲線上の位置がきまる
-
----------------------------------------------------------------------------------
-
-
-main.js
-新しいコントールポイントを作って、ベジェ曲線を強制的にある通過点（original controll point）を通らせる
-
-main2.js
-3個以上のコントロールポイントを持つベジェ曲線の描画
-
-main3.js
-main2.jsの最適化
+context上に描かれた物体の重なりを透明ピクセルで表す（クッキーカッター）
