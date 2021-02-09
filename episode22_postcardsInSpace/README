@@ -1,0 +1,42 @@
+focal length（fl） : 焦点距離（カメラ内部）
+aperture : 0~ z上にある（0はカメラの位置、オブジェクトは400とか？）
+perspective : 画角
+
+https://capa.getnavi.jp/special/271145/
+
+fomula for perspective
+perspective = fl / (fl + z)
+
+焦点距離が全体の距離（焦点距離 ＋ 0~ オブジェクトまでの距離）でわられる
+
+
+
+1.(0, 0)を画面の中心とする
+※zは手前が- , 奥が+
+vanishing point is x = 0, y = 0, z = ∞
+
+2.perspectiveを設定
+
+3.shapeのpositionを決める（x, y, z）
+→画角を考慮した座標に変換する（x * perspective, y * perspective）
+※この座標は、vanishing pointからの距離を表す
+
+
+// canvas　図形の移動
+context(100, 50);
+context.fillRect(0, 0, 180, 90); => この図形が100, 50移動する
+
+
+
+// canvasでテキストを描写
+キーコード一覧
+http://faq.creasus.net/04/0131/CharCode.html
+キーコードから文字と選ぶ
+String.fromCharCode(65);  // A
+フォント指定
+context.font = "200px Arial"
+テキストを描画
+context.fillText(text, x, y)
+
+// canvasで画像描画
+context.drawImg(image,dx, dy)
