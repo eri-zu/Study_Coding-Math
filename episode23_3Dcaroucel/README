@@ -1,0 +1,19 @@
+//sortメソッドをcompare関数を元に使う
+
+Array.sort(compare);
+
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+
+// メソッド
+()ありで呼び出し
+その場で実行されてしまう
+
+()なしで呼び出し
+その場で実行されないので、コールバック関数（オブジェクト）とかには()がつかない
+
+
+main.js
+3D カルーセル
+
+main2.js
+3D カルーセル move based on mouse position
