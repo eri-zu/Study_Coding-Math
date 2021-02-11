@@ -1,0 +1,17 @@
+@charset "UTF-8";
+/* padding,marginがない要素もあるので、絞って内部・外部余白をリセット */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, figure, input, textarea, p, blockquote, th, td  {
+  margin: 0;
+  padding: 0;
+}
+/* テーブルのボーダーを一本化 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 古いブラウザで起こりがちな画像の周りにブルーの線がつくのを防ぐ */
+fieldset, img {
+  border: 0;
+}
+

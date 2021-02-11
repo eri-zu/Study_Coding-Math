@@ -1,0 +1,30 @@
+2D and 3D Coordinate Rotation
+
+(x, y)→rotate by angle →(x1, y1)
+
+x1 = x.cos(angle) - y.sin(angle);
+y1 = y.cos(angle) + x.sin(angle);
+
+例：座標を0.5度回転させると(5, 3)はどこに移動するか？
+x1 = 5 * cos(0.5) - 3 * sin(0.5);
+y1 = 3 * cos(0.5) + 5 * sin(0.5);
+
+https://en.wikipedia.org/wiki/Rotation_(mathematics)
+
+
+その軸を回転させるか決める
+z軸を回転させると
+x, y座標が動く
+
+x axis Rotation
+y1 = y.cosA - z.sinA
+z1 = z.cosA + y.sinA
+
+y axis Rotation
+x1 = x.cosA - z.sinA
+z1 = z.cosA + x.sinA
+
+z axis Rotation
+x1 = x.cosA - y.sinA
+y1 = y.cosA + x.sinA
+

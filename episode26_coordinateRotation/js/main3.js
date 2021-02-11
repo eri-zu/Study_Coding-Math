@@ -6,7 +6,7 @@ const targetCanvas = document.getElementById("target");
 const targetContext = targetCanvas.getContext("2d"); // ヒットされるオブジェクトの描画領域
 const width = (canvas.width = targetCanvas.width = window.innerWidth);
 const height = (canvas.height = targetCanvas.height = window.innerHeight);
-const target = { // 目標到達地点
+let target = { // 目標到達地点
   x: width,
   y: height * Math.random()
 }
@@ -15,6 +15,11 @@ const position = { //現在のposition
   y: height * Math.random()
 }
 const ease = 0.1;
+
+document.body.addEventListener('mousemove', (e) => {
+  target.x = e.clientX;
+  target.y = e.clientY;
+})
 
 update();
 

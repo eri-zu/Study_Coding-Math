@@ -1,30 +1,47 @@
-2D and 3D Coordinate Rotation
+easing and tweening 
+easing is one of the aspect of tweening
 
-(x, y)→rotate by angle →(x1, y1)
+given positon to another
 
-x1 = x.cos(angle) - y.sin(angle);
-y1 = y.cos(angle) + x.sin(angle);
+どこで止まるかわかる！
 
-例：座標を0.5度回転させると(5, 3)はどこに移動するか？
-x1 = 5 * cos(0.5) - 3 * sin(0.5);
-y1 = 3 * cos(0.5) + 5 * sin(0.5);
+tween-
+rotation,
+size,
+scale,
+opacity,
+alpha
 
-https://en.wikipedia.org/wiki/Rotation_(mathematics)
+easing とは
+changing value from one known value to another known value
+usually known time, specific rate
+
+linearly moving is boring
+
+in real life,
+
+だんだん 数値上がって 0, 10, 20, 30.............................30, 20, 10, 0
+
+----------------------------------------------------------
 
 
-その軸を回転させるか決める
-z軸を回転させると
-x, y座標が動く
 
-x axis Rotation
-y1 = y.cosA - z.sinA
-z1 = z.cosA + y.sinA
 
-y axis Rotation
-x1 = x.cosA - z.sinA
-z1 = z.cosA + x.sinA
+-----------------------------------------------------------
 
-z axis Rotation
-x1 = x.cosA - y.sinA
-y1 = y.cosA + x.sinA
+physics concept
+velocity, acceletaion, friction
 
+どこで止まるかわからない
+let it go
+
+
+
+mian.js
+目標地点を設定してシンプルにイージング 
+
+main2.js
+マウスでクリックしたところにイージング 
+
+main3.js
+マウスを動かしたところにボールがついてくる＝マウスストーカー
