@@ -6,32 +6,30 @@ const targetCanvas = document.getElementById("target");
 const targetContext = targetCanvas.getContext("2d"); // ヒットされるオブジェクトの描画領域
 const width = (canvas.width = targetCanvas.width = window.innerWidth);
 const height = (canvas.height = targetCanvas.height = window.innerHeight);
-const target = { // 目標到達地点
-  x: width,
-  y: height * Math.random()
+const point = {
+  x: 300, 
+  y: 200
 }
-const position = { //現在のposition
-  x: 0,
-  y: height * Math.random()
-}
-const ease = 0.1;
+const angle = 0.05;
+
+// 画面の中心を(0, 0)とする
+context.translate(width / 2, height / 2);
 
 update();
 
 function update() {
-  context.clearRect(0, 0, width, height);
-
+  context.clearRect(-width / 2, -height / 2, width, height);
+  
   context.beginPath();
-  context.arc(position.x, position.y, 20, 0, Math.PI * 2, false);
+  context.arc(point.x, point.y, 20, 0, Math.PI * 2, false);
   context.fill();
 
-  const distX = target.x - position.x; //目標到達地点までの距離
-  const distY = target.y - position.y;
-  const vx = distX * ease; //1フレームごとに目標到達地点までの距離の半分（easeが0.5なので）進む
-  const vy = distY * ease;
+  let x = point.x * Math.cos(angle) - point.y * Math.sin(angle);
+  let y = point.y * Math.cos(angle) + point.x * Math.sin(angle);
 
-  position.x += vx;
-  position.y += vy;
+  point.x = x;
+  point.y = y;
+
 
   window.requestAnimationFrame(update);
 }
