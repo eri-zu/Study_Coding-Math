@@ -1,0 +1,43 @@
+動作の問題は、目標に到達すると急に止まるということ
+↓
+easing を使って徐々に減速
+速度 = easing ✖️ 距離
+現在の位置に速度を加える
+
+ゼノンのパラドックス
+ものが進むためには2地点の真ん中を通らなけrばいけない
+その理論でいくと、永久に目標地点に到達しない
+
+100の距離とする
+easingは0.5とする
+
+1フレーム で50進む
+2フレームで75進む
+3フレームで87.５.......
+96.875.......
+98.435........
+
+=> 1ピクセルはどこまで切り分けれるのか？
+=> 20
+=> スプライトの位置は常に0.05の倍数（1/20）
+
+if(Math.abs(dx) < 0.05 && Math.abs(dy) < 0.05) {
+  positon.x = target.x
+}
+
+
+
+main.js
+formula shorter
+
+main2.js
+fomula optimization
+
+main3.js 
+use easing for rotation
+
+main4.js
+
+
+canvas 文法
+https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
